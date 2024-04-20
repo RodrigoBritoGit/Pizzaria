@@ -9,35 +9,65 @@ datasource db {
 
 // criar uma migration: yarn prisma migrate dev
 model User {
-  id String @id @default(uuid())
-  name String
-  email String
-  password String
+  id         String    @id @default(uuid())
+  name       String
+  email      String
+  password   String
   created_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  update_at  DateTime? @default(now())
+
   //@@map é o nome da tabela no banco de dados
   @@map("users")
 }
 
 model Categorias {
-  id String @id @default(uuid())
-  nome String
-  created_at DateTime? @default(now())
-  update_at DateTime? @default(now())
+  id         String     @id @default(uuid())
+  nome       String
+  created_at DateTime?  @default(now())
+  update_at  DateTime?  @default(now())
+  produtos   Produtos[]
+
   @@map("categorias")
-  produtos Produtos[]
 }
 
 model Produtos {
-  id String @id @default(uuid())
-  nome String
-  preco String
-  descricao String
-  banner String
-  created_at DateTime? @default(now())
-  update_at DateTime? @default(now())
-  categorias Categorias @relation(fields: [categorias_id], references: [id])
-  @@map("produtos")
+  id            String     @id @default(uuid())
+  nome          String
+  preco         String
+  descricao     String
+  banner        String
+  created_at    DateTime?  @default(now())
+  update_at     DateTime?  @default(now())
+  categorias    Categorias @relation(fields: [categorias_id], references: [id])
   categorias_id String
+  itens         Itens[]
 
+  @@map("produtos")
+}
+
+model Pedidos {
+  id         String    @id @default(uuid())
+  mesa       Int
+  //@defaul serve para passar um valor de inicialização
+  status     Boolean   @default(false)
+  rascunho   Boolean   @default(true)
+  cliente    String?
+  created_at DateTime? @default(now())
+  update_at  DateTime? @default(now())
+  itens      Itens[]
+
+  @@map("pedidos")
+}
+
+model Itens {
+  id          String    @id @default(uuid())
+  quantidade  Int
+  created_at  DateTime? @default(now())
+  update_at   DateTime? @default(now())
+  pedidos     Pedidos   @relation(fields: [pedidos_id], references: [id])
+  produtos    Produtos  @relation(fields: [produtos_id], references: [id])
+  pedidos_id  String
+  produtos_id String
+
+  @@map("itens")
 }
