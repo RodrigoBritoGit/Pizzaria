@@ -11,6 +11,7 @@ class CreateUserController {
         email,
         password
     });
+    res.status(200).send();
     return user;
   }
 }
