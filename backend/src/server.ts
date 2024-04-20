@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 // Esse import precisa estar sempre em segundo lugar nessa ordem 
 import 'express-async-errors'
+import cors from 'cors'
 import { router } from "./routes";
 
 const app = express();
