@@ -1,3 +1,4 @@
+import { hash } from "bcryptjs"
 import prismaClient  from "../../prisma"
 
 interface UserRequest{
@@ -20,6 +21,8 @@ class CreateUserService {
             }
         })
 
+        const passwordHash = await hash(password, 8);
+
         if (userAlreadExists){
             throw new Error("Usúario já cadastrado na plataforma")
         }
@@ -28,7 +31,7 @@ class CreateUserService {
             data: {
                 name: name,
                 email: email,
-                password: password
+                password: passwordHash
             }
         })
 
